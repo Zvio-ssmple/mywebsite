@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrollable Article with Interactive Eyes</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Helvetica', sans-serif;
+            display: flex;
+            justify-content: center;
+        }
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            gap: 10px;
+        }
+        .eye {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            border: 2px solid #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .pupil {
+            width: 20px;
+            height: 20px;
+            background: black;
+            border-radius: 50%;
+            transition: transform 0.1s ease-out;
+        }
+        .article-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            padding: 20px 0;
+        }
+        .article {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 800px;
+            text-align: justify;
+        }
+        .article h1 {
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .article .meta-info {
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            color: gray;
+            margin-bottom: 20px;
+        }
+        .article .meta-info span {
+            display: block;
+            margin-top: 5px;
+        }
+        .article p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .parallax {
+            position: relative;
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: red;
+            background: rgba(0, 0, 0, 0.8); /* Initial black block */
+            padding: 20px;
+            border-radius: 5px;
+            opacity: 0;
+            filter: blur(8px); /* Initial blur */
+            transition: opacity 0.5s ease, filter 1s ease, color 1s ease;
+            margin-top: 20px;
+        }
+        .visible {
+            opacity: 1;
+            filter: blur(0);
+            color: black; /* Text color becomes black */
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="background" id="eye-grid">
+        <!-- Eyes dynamically generated -->
+    </div>
+    <div class="article-container">
+        <div class="article">
+            <h1>Tim Cook expects our behavior to change when we feel ‘surveilled all the time’ by tech: ‘It changes society in a major way’</h1>
+            <div class="meta-info">
+                Published Thu, Jun 9 2022 1:44 PM EDT
+                <span>Megan Sauer | @meggsauer</span>
+            </div>
+            <p>Apple CEO Tim Cook is no stranger to criticizing other tech companies for monitoring their users’ data. Now, he’s upping the ante – by indicating that such data collection could soon become a widespread problem for society at large.</p>
+            <p>At the TIME100 Summit 2022 on Tuesday, Cook said he was “quite worried” about tech companies surveilling their users, because it could change the way most humans behave and interact with each other.</p>
+            <p>“I fear deeply the loss of privacy,” Cook, 61, said. “If we begin to feel like we’re being surveilled all the time, then our behavior changes. We begin to do less. We begin to think about things less. You begin to modify how you think. In a world like that where you’re restraining yourself, [it] changes society in a major way.”</p>
+            <p>Several studies show that humans behave differently when they know they’re being watched. In 2018, researchers from a Dutch university found participants “cheated significantly less” on tests when cameras were present. In an Axios survey published in 2019, some participants self-reported that being watched affected their behavior, and 48% said surveillance could cause them to change their behavior at work.</p>
+            <p>Cook’s comments join a chorus of recent controversy surrounding tech companies and user data. Last month, more than one million Illinois residents received checks for up to $397 after Facebook settled a $650 million class action lawsuit. According to plaintiffs, the platform gathered facial recognition data without user consent – which is illegal under Illinois state law.</p>
+            <p>Google Photos is in the midst of a similar lawsuit, and as CNBC reported in 2017, all of Google’s platforms – including Gmail, Google Docs and the company’s eponymous search engine – store information like your phone number, location data and the websites you’ve visited.</p>
+            <p>Google maintains that it doesn’t sell the personal information it stores, but rather uses it to curate personalized ads for its users. The company recently announced tools to help users request the removal of their personal data from its search results.</p>
+            <p>Google, Amazon and even Apple have also come under fire for collecting and reviewing audio samples from smart home systems. Google and Amazon eventually acknowledged their use of the practice with Google Assistant and Alexa, providing opt-out options for users. Apple, which is generally viewed as more privacy-conscious than most of its rivals, went a step further by apologizing and suspending its “human grading” practice across all Siri services.</p>
+            <p>Despite the tech world’s myriad privacy issues, Cook noted on Tuesday that a surveillance-heavy future isn’t a foregone conclusion yet. He said he’s “optimistic” that tech companies will develop more ways to respect individuals’ data, though he did not specify whether those changes would be motivated by altruism, lawsuits or the threat of federal regulations.</p>
+            <p>“It’s tough to say that a company, or anyone for that matter, should be able to step in and – on an uninformed basis – vacuum up your data,” Cook said.</p>
+            <!-- Add the parallax message here -->
+            <div class="parallax" id="parallax">YOU'RE BEING WATCHED</div>
+        </div>
+    </div>
+    <script>
+        const container = document.getElementById('eye-grid');
+        const rows = Math.ceil(window.innerHeight / 60);
+        const cols = Math.ceil(window.innerWidth / 60);
+
+        // Create the grid of eyes
+        for (let i = 0; i < rows * cols; i++) {
+            const eye = document.createElement('div');
+            eye.classList.add('eye');
+            const pupil = document.createElement('div');
+            pupil.classList.add('pupil');
+            eye.appendChild(pupil);
+            container.appendChild(eye);
+        }
+
+        // Add cursor tracking for all eyes
+        document.addEventListener('mousemove', (event) => {
+            const eyes = document.querySelectorAll('.eye');
+            eyes.forEach(eye => {
+                const rect = eye.getBoundingClientRect();
+                const eyeCenterX = rect.left + rect.width / 2;
+                const eyeCenterY = rect.top + rect.height / 2;
+
+                const angle = Math.atan2(event.clientY - eyeCenterY, event.clientX - eyeCenterX);
+                const pupil = eye.querySelector('.pupil');
+
+                const maxPupilMovement = 15;
+                const x = Math.cos(angle) * maxPupilMovement;
+                const y = Math.sin(angle) * maxPupilMovement;
+
+                pupil.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+
+        // Reveal parallax text with blur effect
+        window.addEventListener('scroll', () => {
+            const parallax = document.getElementById('parallax');
+            const scrollPosition = window.scrollY;
+            const articleContainer = document.querySelector('.article-container');
+            const articleHeight = articleContainer.offsetHeight;
+            const maxScroll = articleHeight - window.innerHeight;
+
+            // Calculate blur based on scroll position
+            const blurAmount = Math.max(8 - (scrollPosition / maxScroll) * 8, 0); // 8px to 0px blur
+
+            // Adjust opacity and blur as we scroll
+            parallax.style.filter = `blur(${blurAmount}px)`;
+            parallax.style.opacity = Math.min(1, (scrollPosition / maxScroll) * 2);
+            
+            // Show the text after scrolling past a certain point
+            if (scrollPosition >= maxScroll * 0.85) {
+                parallax.classList.add('visible');
+            } else {
+                parallax.classList.remove('visible');
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
